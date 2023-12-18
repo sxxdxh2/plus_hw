@@ -1,6 +1,6 @@
 package com.sparta.plus_hw.common;
 
-import com.sparta.plus_hw.security.UserDetailsServiceImpl;
+import com.sparta.plus_hw.user.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

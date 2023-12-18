@@ -1,11 +1,15 @@
 package com.sparta.plus_hw.user.controller;
 
 import com.sparta.plus_hw.user.dto.ApiResponseDto;
+import com.sparta.plus_hw.user.dto.LoginRequestDto;
 import com.sparta.plus_hw.user.dto.SignupRequestDto;
+import com.sparta.plus_hw.user.dto.UserResponseDto;
 import com.sparta.plus_hw.user.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +23,28 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ApiResponseDto signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         userService.signup(signupRequestDto);
-        return new ApiResponseDto("회원가입 성공", HttpStatus.OK.value());
+        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        userService.login(loginRequestDto, response);
+        return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

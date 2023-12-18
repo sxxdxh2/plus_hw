@@ -1,4 +1,4 @@
-package com.sparta.plus_hw.security;
+package com.sparta.plus_hw.user.security;
 
 import com.sparta.plus_hw.user.entity.User;
 import com.sparta.plus_hw.user.repository.UserRepository;

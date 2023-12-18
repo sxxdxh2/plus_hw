@@ -1,6 +1,6 @@
 package com.sparta.plus_hw.common;
 
-import com.sparta.plus_hw.security.UserDetailsServiceImpl;
+import com.sparta.plus_hw.user.security.UserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
