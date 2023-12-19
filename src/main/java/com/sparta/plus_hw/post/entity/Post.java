@@ -7,9 +7,11 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Post extends Timestamped {
 
@@ -33,7 +35,9 @@ public class Post extends Timestamped {
         this.user = user;
     }
 
-
-
+    public void update(PostRequestDto postRequestDto) {
+        this.title = postRequestDto.getTitle();
+        this.contents = postRequestDto.getContents();
+    }
 
 }

@@ -3,6 +3,7 @@ package com.sparta.plus_hw.post.controller;
 import com.sparta.plus_hw.post.dto.GetPostResponseDto;
 import com.sparta.plus_hw.post.dto.PostRequestDto;
 import com.sparta.plus_hw.post.dto.PostResponseDto;
+import com.sparta.plus_hw.post.dto.UpdatePostResponseDto;
 import com.sparta.plus_hw.post.service.PostService;
 import com.sparta.plus_hw.user.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +23,17 @@ public class PostController {
 
     //작성
     @PostMapping("")
-    public ResponseEntity<String> createPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> createPost(
+            @RequestBody PostRequestDto postRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
         postService.createPost(postRequestDto, userDetails.getUser());
         return new ResponseEntity<>("게시물 작성 성공", HttpStatus.OK);
     }
 
-//조회
-@GetMapping("")
-public List<PostResponseDto> getPostList() {
+    //조회
+    @GetMapping("")
+    public List<PostResponseDto> getPostList() {
     return postService.getPostList();
 }
 
@@ -40,5 +44,15 @@ public List<PostResponseDto> getPostList() {
 
     }
 
+    @PatchMapping("/{postId}")
+    public ResponseEntity<UpdatePostResponseDto> updatePost(
+            @PathVariable Long postId,
+            @RequestBody PostRequestDto postRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+
+        UpdatePostResponseDto updatePostResponseDto = postService.updatePost(postId, postRequestDto,userDetails.getUser());
+        return ResponseEntity.ok(updatePostResponseDto);
+    }
 
 }
