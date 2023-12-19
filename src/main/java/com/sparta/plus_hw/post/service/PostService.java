@@ -1,5 +1,6 @@
 package com.sparta.plus_hw.post.service;
 
+import com.sparta.plus_hw.post.dto.GetPostResponseDto;
 import com.sparta.plus_hw.post.dto.PostRequestDto;
 import com.sparta.plus_hw.post.dto.PostResponseDto;
 import com.sparta.plus_hw.post.entity.Post;
@@ -32,7 +33,12 @@ public class PostService {
         return postResponseDtoList;
     }
 
-
+    public GetPostResponseDto getPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                ()-> new IllegalArgumentException("글이 존재하지 않습니다.")
+        );
+        return new GetPostResponseDto(post);
+    }
 
 
 

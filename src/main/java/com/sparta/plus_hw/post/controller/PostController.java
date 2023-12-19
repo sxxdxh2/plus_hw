@@ -1,5 +1,6 @@
 package com.sparta.plus_hw.post.controller;
 
+import com.sparta.plus_hw.post.dto.GetPostResponseDto;
 import com.sparta.plus_hw.post.dto.PostRequestDto;
 import com.sparta.plus_hw.post.dto.PostResponseDto;
 import com.sparta.plus_hw.post.service.PostService;
@@ -32,6 +33,12 @@ public List<PostResponseDto> getPostList() {
     return postService.getPostList();
 }
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<GetPostResponseDto> getPost(@PathVariable Long postId){
+        GetPostResponseDto getPostResponseDto = postService.getPost(postId);
+        return ResponseEntity.ok(getPostResponseDto);
+
+    }
 
 
 }
