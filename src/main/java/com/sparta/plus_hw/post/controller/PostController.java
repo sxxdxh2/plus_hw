@@ -3,7 +3,6 @@ package com.sparta.plus_hw.post.controller;
 import com.sparta.plus_hw.post.dto.GetPostResponseDto;
 import com.sparta.plus_hw.post.dto.PostRequestDto;
 import com.sparta.plus_hw.post.dto.PostResponseDto;
-import com.sparta.plus_hw.post.dto.UpdatePostResponseDto;
 import com.sparta.plus_hw.post.service.PostService;
 import com.sparta.plus_hw.user.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -45,14 +44,14 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}")
-    public ResponseEntity<UpdatePostResponseDto> updatePost(
+    public ResponseEntity<String> updatePost(
             @PathVariable Long postId,
             @RequestBody PostRequestDto postRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
 
-        UpdatePostResponseDto updatePostResponseDto = postService.updatePost(postId, postRequestDto,userDetails.getUser());
-        return ResponseEntity.ok(updatePostResponseDto);
+        postService.updatePost(postId, postRequestDto,userDetails.getUser());
+        return new ResponseEntity<>("게시물 수정 완료", HttpStatus.OK);
     }
 
     @DeleteMapping("/{postId}")

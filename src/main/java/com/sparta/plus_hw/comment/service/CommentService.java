@@ -2,6 +2,7 @@ package com.sparta.plus_hw.comment.service;
 
 import com.sparta.plus_hw.comment.dto.CommentRequestDto;
 import com.sparta.plus_hw.comment.dto.CommentResponseDto;
+import com.sparta.plus_hw.comment.dto.UpdateCommentRequestDto;
 import com.sparta.plus_hw.comment.entity.Comment;
 import com.sparta.plus_hw.comment.repository.CommentRepository;
 import com.sparta.plus_hw.post.entity.Post;
@@ -10,6 +11,9 @@ import com.sparta.plus_hw.post.service.PostService;
 import com.sparta.plus_hw.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.RejectedExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +24,7 @@ public class CommentService {
 
 
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto, User user) {
-        Post post = postRepository.findById(commentRequestDto.getId()).orElseThrow(
+        Post post = postRepository.findById(commentRequestDto.getPostId()).orElseThrow(
                 ()-> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
 
@@ -32,6 +36,25 @@ public class CommentService {
         commentRepository.save(comment);
 
         return new CommentResponseDto(comment);
+    }
+
+    @Transactional
+    public CommentResponseDto updateComment(Long commentId, UpdateCommentRequestDto updateCommentRequestDto, User user) {
+        Comment comment = getComment(commentId, user);
+
+        comment.setContents(updateCommentRequestDto.getContents());
+
+        return new CommentResponseDto(comment);
+    }
+
+    private Comment getComment(Long commentId, User user) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 ID 입니다."));
+
+        if(!user.getId().equals(comment.getUser().getId())) {
+            throw new RejectedExecutionException("작성자만 수정할 수 있습니다.");
+        }
+        return comment;
     }
 
 

@@ -3,7 +3,6 @@ package com.sparta.plus_hw.post.service;
 import com.sparta.plus_hw.post.dto.GetPostResponseDto;
 import com.sparta.plus_hw.post.dto.PostRequestDto;
 import com.sparta.plus_hw.post.dto.PostResponseDto;
-import com.sparta.plus_hw.post.dto.UpdatePostResponseDto;
 import com.sparta.plus_hw.post.entity.Post;
 import com.sparta.plus_hw.post.repository.PostRepository;
 import com.sparta.plus_hw.user.entity.User;
@@ -42,7 +41,7 @@ public class PostService {
     }
 
     @Transactional
-    public UpdatePostResponseDto updatePost(Long postId, PostRequestDto postRequestDto, User user) {
+    public void updatePost(Long postId, PostRequestDto postRequestDto, User user) {
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
@@ -50,7 +49,6 @@ public class PostService {
         if(post.getUser().getId().equals(user.getId())){
             post.update(postRequestDto);
 
-            return new UpdatePostResponseDto(post);
         } else {throw new IllegalArgumentException("권한이 없습니다.");}
     }
 
