@@ -51,10 +51,19 @@ public class PostService {
             post.update(postRequestDto);
 
             return new UpdatePostResponseDto(post);
-        } else {throw new IllegalArgumentException("x");}
+        } else {throw new IllegalArgumentException("권한이 없습니다.");}
     }
 
-
+    public void deletePost(Long postId,User user) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                ()-> new IllegalArgumentException("게시글이 존재하지 않습니다.")
+        );
+        if(post.getUser().getId().equals(user.getId())){
+            postRepository.delete(post);
+        } else {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+    }
 
 
 }

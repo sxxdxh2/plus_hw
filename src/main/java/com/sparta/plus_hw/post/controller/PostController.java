@@ -55,4 +55,17 @@ public class PostController {
         return ResponseEntity.ok(updatePostResponseDto);
     }
 
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<String> deletePost(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        postService.deletePost(postId,userDetails.getUser());
+
+        return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
+    }
+
+
+
+
 }
