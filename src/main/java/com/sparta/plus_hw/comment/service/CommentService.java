@@ -10,6 +10,8 @@ import com.sparta.plus_hw.post.repository.PostRepository;
 import com.sparta.plus_hw.post.service.PostService;
 import com.sparta.plus_hw.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,11 +25,10 @@ public class CommentService {
     private final PostRepository postRepository;
 
 
-    public CommentResponseDto createComment(CommentRequestDto commentRequestDto, User user) {
+    public ResponseEntity<String> createComment(CommentRequestDto commentRequestDto, User user) {
         Post post = postRepository.findById(commentRequestDto.getPostId()).orElseThrow(
                 ()-> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
-
 
         Comment comment = new Comment(commentRequestDto);
         comment.setUser(user);
@@ -35,22 +36,23 @@ public class CommentService {
 
         commentRepository.save(comment);
 
-        return new CommentResponseDto(comment);
+        return new ResponseEntity<>("댓글 작성 완료", HttpStatus.OK);
     }
 
     @Transactional
-    public CommentResponseDto updateComment(Long commentId, UpdateCommentRequestDto updateCommentRequestDto, User user) {
+    public ResponseEntity<String> updateComment(Long commentId, UpdateCommentRequestDto updateCommentRequestDto, User user) {
         Comment comment = getComment(commentId, user);
 
         comment.setContents(updateCommentRequestDto.getContents());
 
-        return new CommentResponseDto(comment);
+        return new ResponseEntity<>("댓글 수정 완료", HttpStatus.OK);
     }
 
-    public void deleteComment(Long commentId, User user) {
+    public ResponseEntity<String> deleteComment(Long commentId, User user) {
         Comment comment = getComment(commentId, user);
 
         commentRepository.delete(comment);
+        return new ResponseEntity<>("댓글 삭제 완료", HttpStatus.OK);
     }
 
 

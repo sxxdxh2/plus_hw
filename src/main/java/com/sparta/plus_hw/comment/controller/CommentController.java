@@ -24,9 +24,7 @@ public class CommentController {
             @RequestBody CommentRequestDto commentRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        commentService.createComment(commentRequestDto, userDetails.getUser());
-
-        return new ResponseEntity<>("댓글 작성 완료", HttpStatus.OK);
+        return commentService.createComment(commentRequestDto, userDetails.getUser());
     }
 
     @PatchMapping("/{commentId}")
@@ -35,9 +33,7 @@ public class CommentController {
             @RequestBody UpdateCommentRequestDto updateCommentRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        commentService.updateComment(commentId, updateCommentRequestDto, userDetails.getUser());
-
-        return new ResponseEntity<>("댓글 수정 완료", HttpStatus.OK);
+        return commentService.updateComment(commentId, updateCommentRequestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/{commentId}")
@@ -45,9 +41,7 @@ public class CommentController {
             @PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-            commentService.deleteComment(commentId, userDetails.getUser());
-
-            return new ResponseEntity<>("댓글 삭제 완료", HttpStatus.OK);
+        return commentService.deleteComment(commentId, userDetails.getUser());
     }
 
 }
