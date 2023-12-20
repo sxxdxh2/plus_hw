@@ -1,7 +1,6 @@
 package com.sparta.plus_hw.user.service;
 
 import com.sparta.plus_hw.common.JwtUtil;
-import com.sparta.plus_hw.user.dto.ApiResponseDto;
 import com.sparta.plus_hw.user.dto.LoginRequestDto;
 import com.sparta.plus_hw.user.dto.SignupRequestDto;
 import com.sparta.plus_hw.user.entity.User;

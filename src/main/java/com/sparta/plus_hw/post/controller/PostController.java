@@ -26,8 +26,7 @@ public class PostController {
             @RequestBody PostRequestDto postRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        postService.createPost(postRequestDto, userDetails.getUser());
-        return new ResponseEntity<>("게시물 작성 성공", HttpStatus.OK);
+        return postService.createPost(postRequestDto, userDetails.getUser());
     }
 
     //조회
@@ -40,7 +39,6 @@ public class PostController {
     public ResponseEntity<GetPostResponseDto> getPost(@PathVariable Long postId){
         GetPostResponseDto getPostResponseDto = postService.getPost(postId);
         return ResponseEntity.ok(getPostResponseDto);
-
     }
 
     @PatchMapping("/{postId}")
@@ -49,9 +47,7 @@ public class PostController {
             @RequestBody PostRequestDto postRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-
-        postService.updatePost(postId, postRequestDto,userDetails.getUser());
-        return new ResponseEntity<>("게시물 수정 완료", HttpStatus.OK);
+        return postService.updatePost(postId, postRequestDto,userDetails.getUser());
     }
 
     @DeleteMapping("/{postId}")
@@ -59,12 +55,7 @@ public class PostController {
             @PathVariable Long postId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        postService.deletePost(postId,userDetails.getUser());
-
-        return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
+        return postService.deletePost(postId,userDetails.getUser());
     }
-
-
-
 
 }
