@@ -25,37 +25,33 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public ResponseEntity<ApiResponseDto> signup(SignupRequestDto signupRquestDto) {
+    public ResponseEntity<String> signup(SignupRequestDto signupRquestDto) {
         String nickname = signupRquestDto.getNickname();
         String password = passwordEncoder.encode(signupRquestDto.getPassword());
         String checkPassword = passwordEncoder.encode(signupRquestDto.getCheckPassword());
 
         Optional<User> checkNickname = userRepository.findByNickname(nickname);
         if (checkNickname.isPresent()) {
-            return ResponseEntity.status(400).body(
-                    new ApiResponseDto("중복된 닉네임입니다.", HttpStatus.BAD_REQUEST));
+            return new ResponseEntity<>("중복된 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
 
         if(password.contains(nickname)) {
-            return ResponseEntity.status(400).body(
-                    new ApiResponseDto("비밀번호는 닉네임을 포함할 수 없습니다.", HttpStatus.BAD_REQUEST));
+            return new ResponseEntity<>("비밀번호는 닉네임을 포함할 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
 
         if(!passwordEncoder.matches(signupRquestDto.getPassword(), checkPassword)) {
-            return ResponseEntity.status(400).body(
-                    new ApiResponseDto("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST));
+            return new ResponseEntity<>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         User user = new User(nickname, password);
         userRepository.save(user);
-        return ResponseEntity.status(202).body(
-                new ApiResponseDto("회원가입 성공", HttpStatus.ACCEPTED));
+        return new ResponseEntity<>("회원가입 성공", HttpStatus.ACCEPTED);
     }
 
 
 
     @Transactional
-    public ResponseEntity<ApiResponseDto> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseEntity<String> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String nickname = loginRequestDto.getNickname();
         String password = loginRequestDto.getPassword();
 
@@ -63,17 +59,11 @@ public class UserService {
                 .orElseThrow(()-> new IllegalArgumentException("닉네임을 확인해주세요."));
 
         if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("패스워드를 확인해주세요.");
+            return new ResponseEntity<>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
-        // public ResponseEntity<ApirResponseDto> login 어쩌구
-        //if(!passwordEncoder.matches(password, user.getPassword())) {
-        //  return ResponseEntity.status(400).body(
-        //   new ApiResponseDto("패스워드를 확인해주세요.", HttpStatus.BAD_REQUEST));
-        //} 는 왜 ㅇㅏㄴ댐
 
         jwtUtil.addJwtToCookie(jwtUtil.createToken(user.getNickname()), response);
-        return ResponseEntity.status(202).body(
-                new ApiResponseDto("로그인 성공", HttpStatus.ACCEPTED));
+        return new ResponseEntity<>("로그인 성공", HttpStatus.ACCEPTED);
     }
 
 }

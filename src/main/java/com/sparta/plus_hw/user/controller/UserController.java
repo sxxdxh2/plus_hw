@@ -22,28 +22,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity <ApiResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity <String> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         return userService.signup(signupRequestDto);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        userService.login(loginRequestDto, response);
-        return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
+        return userService.login(loginRequestDto, response);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
