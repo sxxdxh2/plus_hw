@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatusCode;
 
 @Getter
 @Setter
@@ -14,6 +15,6 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponseDto {
     private String msg;
-    private int status;
+    private HttpStatusCode httpStatusCode;
 
 }

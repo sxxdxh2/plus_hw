@@ -3,7 +3,6 @@ package com.sparta.plus_hw.user.controller;
 import com.sparta.plus_hw.user.dto.ApiResponseDto;
 import com.sparta.plus_hw.user.dto.LoginRequestDto;
 import com.sparta.plus_hw.user.dto.SignupRequestDto;
-import com.sparta.plus_hw.user.dto.UserResponseDto;
 import com.sparta.plus_hw.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -23,9 +22,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-        userService.signup(signupRequestDto);
-        return new ResponseEntity<>("회원가입 성공", HttpStatus.OK);
+    public ResponseEntity <ApiResponseDto> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+        return userService.signup(signupRequestDto);
     }
 
     @PostMapping("/login")

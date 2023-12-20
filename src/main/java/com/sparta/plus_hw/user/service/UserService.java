@@ -3,15 +3,14 @@ package com.sparta.plus_hw.user.service;
 import com.sparta.plus_hw.common.JwtUtil;
 import com.sparta.plus_hw.user.dto.ApiResponseDto;
 import com.sparta.plus_hw.user.dto.LoginRequestDto;
-import com.sparta.plus_hw.user.dto.UserResponseDto;
-import com.sparta.plus_hw.user.repository.UserRepository;
 import com.sparta.plus_hw.user.dto.SignupRequestDto;
 import com.sparta.plus_hw.user.entity.User;
-
+import com.sparta.plus_hw.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,49 +25,55 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public UserResponseDto signup(SignupRequestDto signupRquestDto) {
+    public ResponseEntity<ApiResponseDto> signup(SignupRequestDto signupRquestDto) {
         String nickname = signupRquestDto.getNickname();
         String password = passwordEncoder.encode(signupRquestDto.getPassword());
         String checkPassword = passwordEncoder.encode(signupRquestDto.getCheckPassword());
 
         Optional<User> checkNickname = userRepository.findByNickname(nickname);
         if (checkNickname.isPresent()) {
-            throw new IllegalArgumentException("중복된 닉네임입니다.");
-         //   return new ApiResponseDto("중복된 사용자가 존재합니다.", HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.status(400).body(
+                    new ApiResponseDto("중복된 닉네임입니다.", HttpStatus.BAD_REQUEST));
+        }
+
+        if(password.contains(nickname)) {
+            return ResponseEntity.status(400).body(
+                    new ApiResponseDto("비밀번호는 닉네임을 포함할 수 없습니다.", HttpStatus.BAD_REQUEST));
         }
 
         if(!passwordEncoder.matches(signupRquestDto.getPassword(), checkPassword)) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            return ResponseEntity.status(400).body(
+                    new ApiResponseDto("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST));
         }
-
 
         User user = new User(nickname, password);
         userRepository.save(user);
-        return new UserResponseDto(user);
+        return ResponseEntity.status(202).body(
+                new ApiResponseDto("회원가입 성공", HttpStatus.ACCEPTED));
     }
 
+
+
     @Transactional
-    public UserResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public ResponseEntity<ApiResponseDto> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String nickname = loginRequestDto.getNickname();
         String password = loginRequestDto.getPassword();
 
         User user = userRepository.findByNickname(nickname)
-                .orElseThrow(()-> new IllegalArgumentException("닉네임 또는 패스워드를 확인해주세요."));
+                .orElseThrow(()-> new IllegalArgumentException("닉네임을 확인해주세요."));
 
         if(!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("닉네임 또는 패스워드를 확인해주세요.");
+            throw new IllegalArgumentException("패스워드를 확인해주세요.");
         }
+        // public ResponseEntity<ApirResponseDto> login 어쩌구
+        //if(!passwordEncoder.matches(password, user.getPassword())) {
+        //  return ResponseEntity.status(400).body(
+        //   new ApiResponseDto("패스워드를 확인해주세요.", HttpStatus.BAD_REQUEST));
+        //} 는 왜 ㅇㅏㄴ댐
 
         jwtUtil.addJwtToCookie(jwtUtil.createToken(user.getNickname()), response);
-        return new UserResponseDto(user);
+        return ResponseEntity.status(202).body(
+                new ApiResponseDto("로그인 성공", HttpStatus.ACCEPTED));
     }
-
-
-
-
-
-
-
-
 
 }

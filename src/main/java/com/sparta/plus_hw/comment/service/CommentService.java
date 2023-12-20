@@ -47,6 +47,13 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
+    public void deleteComment(Long commentId, User user) {
+        Comment comment = getComment(commentId, user);
+
+        commentRepository.delete(comment);
+    }
+
+
     private Comment getComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 ID 입니다."));

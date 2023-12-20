@@ -9,12 +9,10 @@ import lombok.Setter;
 @Setter
 public class SignupRequestDto {
 
-    @Size(min = 3, message = "최소 3자 이상 입력하세요.")
-    @Pattern(regexp = "^[a-z0-9]*$", message = "알파벳 소문자, 숫자로 구성되어야 합니다.")
+    @Pattern(regexp = "^[a-zA-Z0-9]{3,10}$", message = "닉네임은 최소 3자 이상, 알파벳 대소문자와 숫자로 구성되어야 합니다.")
     private String nickname;
 
-    @Size(min = 4, message = "닉네임을 포함하지 않도록 입력하세요.(최소 4자)")
-    @Pattern(regexp="^[a-zA-Z0-9]*$", message="알파벳 대소문자, 숫자로 구성되어야 합니다.")
+    @Pattern(regexp="^[a-zA-Z0-9]{4,12}$", message="비밀번호는 최소 4자 이상, 알파벳 대소문자와 숫자로 구성되어야 합니다.")
     private String password;
 
     private String checkPassword;
