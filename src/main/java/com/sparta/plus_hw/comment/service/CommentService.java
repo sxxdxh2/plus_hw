@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.concurrent.RejectedExecutionException;
 
 @Service
@@ -61,12 +62,23 @@ public class CommentService {
 
     @Transactional
     public ResponseEntity<String> likeComment(Long commentId, User user) {
-        Comment comment = getCommentLike(commentId, user);
+        Comment comment = getCommentLike(commentId);
 
         CommentLike commentLike = new CommentLike(user, comment);
         commentLikeRepository.save(commentLike);
         return new ResponseEntity<>("💗", HttpStatus.OK);
+    }
 
+    @Transactional
+    public ResponseEntity<String> deleteLikeComment(Long commentId, User user){
+        Comment comment = getCommentLike(commentId);
+        Optional<CommentLike> commentLikeOptional = commentLikeRepository.findByUserAndComment(user, comment);
+        if(commentLikeOptional.isPresent()){
+            commentLikeRepository.delete(commentLikeOptional.get());
+        }else{
+            throw new IllegalArgumentException("취소할 좋아요가 없습니다.");
+        }
+        return new ResponseEntity<>("좋아요 취소 완료", HttpStatus.OK);
     }
 
     private Comment getComment(Long commentId, User user) {
@@ -79,7 +91,7 @@ public class CommentService {
         return comment;
     }
 
-    private Comment getCommentLike(Long commentId, User user) {
+    private Comment getCommentLike(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 ID 입니다."));
 
