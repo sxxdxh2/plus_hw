@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 public class PostResponseDto {
+
     private final Long postId;
     private final String title;
     private final String nickname;
     private final LocalDateTime createdAt;
-
 
     public PostResponseDto(Post post) {
         this.postId = post.getId();

@@ -10,14 +10,13 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 유저 ID값 적용
+    private Long id;
 
     @Column(nullable = false)
     private String nickname;
 
     @Column(nullable = false)
     private String password;
-
 
 
     public User(String nickname, String password) {

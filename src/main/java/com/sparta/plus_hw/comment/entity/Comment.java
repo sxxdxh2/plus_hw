@@ -21,17 +21,12 @@ public class Comment {
     private String contents;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "post_id",nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
-
-    public Comment(CommentRequestDto commentRequestDto, Post post) {
-        this.contents = commentRequestDto.getContents();
-        this.post = post;
-    }
 
     public Comment(CommentRequestDto commentRequestDto) {
         this.contents = commentRequestDto.getContents();

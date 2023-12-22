@@ -5,7 +5,6 @@ import com.sparta.plus_hw.post.dto.PostRequestDto;
 import com.sparta.plus_hw.post.timestamped.Timestamped;
 import com.sparta.plus_hw.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -34,11 +34,11 @@ public class UserService {
             return new ResponseEntity<>("중복된 닉네임입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        if(password.contains(nickname)) {
+        if (password.contains(nickname)) {
             return new ResponseEntity<>("비밀번호는 닉네임을 포함할 수 없습니다.", HttpStatus.BAD_REQUEST);
         }
 
-        if(!passwordEncoder.matches(signupRquestDto.getPassword(), checkPassword)) {
+        if (!passwordEncoder.matches(signupRquestDto.getPassword(), checkPassword)) {
             return new ResponseEntity<>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
@@ -48,16 +48,15 @@ public class UserService {
     }
 
 
-
     @Transactional
     public ResponseEntity<String> login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String nickname = loginRequestDto.getNickname();
         String password = loginRequestDto.getPassword();
 
         User user = userRepository.findByNickname(nickname)
-                .orElseThrow(()-> new IllegalArgumentException("닉네임을 확인해주세요."));
+                .orElseThrow(() -> new IllegalArgumentException("닉네임을 확인해주세요."));
 
-        if(!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             return new ResponseEntity<>("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 

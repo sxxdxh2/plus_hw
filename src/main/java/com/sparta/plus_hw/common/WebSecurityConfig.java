@@ -30,10 +30,12 @@ public class WebSecurityConfig {
         this.userDetailsService = userDetailsService;
         this.authenticationConfiguration = authenticationConfiguration;
     }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();

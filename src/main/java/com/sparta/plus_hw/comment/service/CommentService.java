@@ -1,7 +1,6 @@
 package com.sparta.plus_hw.comment.service;
 
 import com.sparta.plus_hw.comment.dto.CommentRequestDto;
-import com.sparta.plus_hw.comment.dto.CommentResponseDto;
 import com.sparta.plus_hw.comment.dto.UpdateCommentRequestDto;
 import com.sparta.plus_hw.comment.entity.Comment;
 import com.sparta.plus_hw.comment.entity.CommentLike;
@@ -11,7 +10,6 @@ import com.sparta.plus_hw.post.entity.Post;
 import com.sparta.plus_hw.post.repository.PostRepository;
 import com.sparta.plus_hw.post.service.PostService;
 import com.sparta.plus_hw.user.entity.User;
-import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,12 +68,12 @@ public class CommentService {
     }
 
     @Transactional
-    public ResponseEntity<String> deleteLikeComment(Long commentId, User user){
+    public ResponseEntity<String> deleteLikeComment(Long commentId, User user) {
         Comment comment = getCommentLike(commentId);
         Optional<CommentLike> commentLikeOptional = commentLikeRepository.findByUserAndComment(user, comment);
-        if(commentLikeOptional.isPresent()){
+        if (commentLikeOptional.isPresent()) {
             commentLikeRepository.delete(commentLikeOptional.get());
-        }else{
+        } else {
             throw new IllegalArgumentException("취소할 좋아요가 없습니다.");
         }
         return new ResponseEntity<>("좋아요 취소 완료", HttpStatus.OK);

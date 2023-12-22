@@ -19,15 +19,16 @@ public class UserController {
 
     private final UserService userService;
 
+    // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity <String> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         return userService.signup(signupRequestDto);
     }
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         return userService.login(loginRequestDto, response);
     }
-
 
 }
