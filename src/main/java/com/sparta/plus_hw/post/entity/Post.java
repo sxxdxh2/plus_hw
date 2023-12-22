@@ -1,5 +1,6 @@
 package com.sparta.plus_hw.post.entity;
 
+import com.sparta.plus_hw.comment.entity.Comment;
 import com.sparta.plus_hw.post.dto.PostRequestDto;
 import com.sparta.plus_hw.post.timestamped.Timestamped;
 import com.sparta.plus_hw.user.entity.User;
@@ -8,6 +9,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +26,9 @@ public class Post extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "post") // 댓글리스트를 불러오기 위한
+    private List<Comment> commentList = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;
