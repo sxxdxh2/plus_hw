@@ -5,6 +5,7 @@ import com.sparta.plus_hw.comment.dto.CommentResponseDto;
 import com.sparta.plus_hw.comment.dto.UpdateCommentRequestDto;
 import com.sparta.plus_hw.comment.service.CommentService;
 import com.sparta.plus_hw.user.security.UserDetailsImpl;
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +44,14 @@ public class CommentController {
     ) {
         return commentService.deleteComment(commentId, userDetails.getUser());
     }
+
+    @PostMapping("/{commentId}/like")
+    public ResponseEntity<String> likeComment(
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return commentService.likeComment(commentId, userDetails.getUser());
+    }
+
 
 }
